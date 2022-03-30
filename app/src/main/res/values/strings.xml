@@ -6,5 +6,9 @@
     <string name="crime_solved_label">해결됨</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-
+    <string name="callPoliceMessage">경찰에 신고하시겠습니까?</string>
+    <string name="policeIntentMessage">경찰에 신고하기를 누르셨습니다</string>
+    <string name="policeNumber">tel:112</string>
+    <string name="isSolvedMessage">이미 해결된 사건입니다</string>
+    <string name="저작권표기"><a href="https://www.flaticon.com/free-icons/security-guard" title="Security guard icons">Security guard icons created by smalllikeart - Flaticon</a></string>
 </resources>

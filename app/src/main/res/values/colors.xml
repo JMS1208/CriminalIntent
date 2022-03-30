@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="cloudyOrange">#EB8242</color>
-    <color name="bloodRed">#950101</color>
-    <color name="bloodBrown">#3D0000</color>
+    <color name="cloudyOrange">#F4FCD9</color>
+    <color name="lightBrown">#BB9981</color>
+    <color name="Brown">#534340</color>
     <color name="lightYellow">#F6DA63</color>
-    <color name="crimson">#DA2D2D</color>
+    <color name="lightGreen">#C5D8A4</color>
     <color name="black">#FF000000</color>
+    <color name="greyBlack">#292929</color>
+    <color name="item_stroke">#43919191</color>
     <color name="white">#FFFFFFFF</color>
 </resources>

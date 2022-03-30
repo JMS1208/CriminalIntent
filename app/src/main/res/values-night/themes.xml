@@ -2,11 +2,11 @@
     <!-- Base application theme. -->
     <style name="Theme.20220327_CriminalIntent" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/bloodBrown</item>
-        <item name="colorPrimaryVariant">@color/bloodRed</item>
+        <item name="colorPrimary">@color/Brown</item>
+        <item name="colorPrimaryVariant">@color/lightBrown</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/crimson</item>
+        <item name="colorSecondary">@color/lightGreen</item>
         <item name="colorSecondaryVariant">@color/cloudyOrange</item>
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
