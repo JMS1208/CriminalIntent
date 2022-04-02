@@ -2,10 +2,22 @@ package com.jms.a20220327_criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import androidx.fragment.app.Fragment
 import com.jms.a20220327_criminalintent.databinding.ActivityMainBinding
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+private val TAG = "메인 액티비티"
+class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks, CrimeFragment.Callbacks {
     lateinit var binding: ActivityMainBinding
+
+    private fun onCreateFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container,fragment)
+            .addToBackStack(null)
+            .commit()
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -16,12 +28,22 @@ class MainActivity : AppCompatActivity() {
 
         if(currentFragment == null) {
             val fragment = CrimeListFragment()
-            supportFragmentManager
-                .beginTransaction()
-                .add(R.id.fragment_container,fragment)
-                .commit()
+            onCreateFragment(fragment)
         }
     }
+
+    override fun onCrimeSelected(uuid: UUID) {
+        val fragment = CrimeFragment.newInstance(uuid)
+        onCreateFragment(fragment)
+
+    }
+
+    override fun onReplaceFragmentFromCrimeFragment() {
+        val fragment = CrimeListFragment()
+        onCreateFragment(fragment)
+    }
+
+
 
 
 }
