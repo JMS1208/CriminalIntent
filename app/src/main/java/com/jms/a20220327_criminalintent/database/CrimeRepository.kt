@@ -6,6 +6,7 @@ import androidx.room.Room
 import com.jms.a20220327_criminalintent.Crime
 import java.lang.IllegalStateException
 import java.util.*
+import java.util.concurrent.Executors
 
 private const val DATABASE_NAME = "crime-database"
 
@@ -16,6 +17,8 @@ class CrimeRepository private constructor(context: Context) {
         DATABASE_NAME
     ).build()
 
+    private val executor = Executors.newSingleThreadExecutor()
+
     private val crimeDao = database.crimeDao()
 
     fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
@@ -24,6 +27,23 @@ class CrimeRepository private constructor(context: Context) {
 
     fun putCrimes(crimes : List<Crime>) = crimeDao.putCrimes(crimes)
 
+    fun addCrime(crime: Crime) {
+        executor.execute {
+            crimeDao.addCrime(crime)
+        }
+    }
+
+    fun updateCrime(crime: Crime) {
+        executor.execute {
+            crimeDao.updateCrime(crime)
+        }
+    }
+
+    fun deleteCrime(crime: Crime) {
+        executor.execute {
+            crimeDao.deleteCrime(crime)
+        }
+    }
 
 
     companion object {

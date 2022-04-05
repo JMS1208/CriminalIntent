@@ -10,16 +10,20 @@ import java.util.*
 
 class CrimeDetailViewModel : ViewModel() {
 
-    private val crimeRepository = CrimeRepository.get()
+    private val crimeRepository = CrimeRepository.get() // 쓸 레포 생성
     private val crimeIdLiveData = MutableLiveData<UUID>()
 
     var crimeLiveData: LiveData<Crime?> =
         Transformations.switchMap(crimeIdLiveData) {
-            crimeId ->
-            crimeRepository.getCrime(crimeId)
+
+            crimeRepository.getCrime(it)
         }
 
     fun loadCrime(crimeId: UUID) {
         crimeIdLiveData.value = crimeId
+    }
+
+    fun saveCrime(crime: Crime) {
+        crimeRepository.updateCrime(crime)
     }
 }

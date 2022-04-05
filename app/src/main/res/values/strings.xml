@@ -11,4 +11,5 @@
     <string name="policeNumber">tel:112</string>
     <string name="isSolvedMessage">이미 해결된 사건입니다</string>
     <string name="저작권표기"><a href="https://www.flaticon.com/free-icons/security-guard" title="Security guard icons">Security guard icons created by smalllikeart - Flaticon</a></string>
+    <string name="deleteDataMenu">삭제</string>
 </resources>

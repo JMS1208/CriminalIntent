@@ -1,29 +1,32 @@
-package com.jms.a20220327_criminalintent
+package com.jms.a20220327_criminalintent.Fragment
 
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.icu.text.DateFormat.getDateInstance
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.text.Layout
 import android.text.format.DateFormat
+import android.util.LayoutDirection
 import android.util.Log
 import android.view.*
 import android.widget.ImageView
+import android.widget.PopupMenu
 import android.widget.TextView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.jms.a20220327_criminalintent.Crime
+import com.jms.a20220327_criminalintent.R
 import com.jms.a20220327_criminalintent.ViewModel.CrimeListViewModel
-import com.jms.a20220327_criminalintent.database.CrimeRepository
 import com.jms.a20220327_criminalintent.databinding.FragmentCrimeListBinding
 import com.jms.a20220327_criminalintent.databinding.ListItemCrimeBinding
 import com.jms.a20220327_criminalintent.databinding.ListItemCrimeRequirePoliceBinding
-import java.text.DateFormat.LONG
-import java.text.DateFormat.getDateInstance
 import java.util.*
 
 
@@ -68,29 +71,7 @@ class CrimeListFragment : Fragment() {
 
 
 
-    override fun onCreateContextMenu(
-        menu: ContextMenu,
-        v: View,
-        menuInfo: ContextMenu.ContextMenuInfo?
-    ) {
-        super.onCreateContextMenu(menu, v, menuInfo)
-        activity?.menuInflater?.inflate(R.menu.recy_menu,menu)
-
-    }
-
-    override fun onContextItemSelected(item: MenuItem): Boolean {
-        return when(item.itemId){
-            R.id.menu1 -> {
-                Toast.makeText(context, "contextMenu pressed!", Toast.LENGTH_SHORT).show()
-
-                true
-            }
-            else-> super.onContextItemSelected(item)
-        }
-
-    }
-
-
+    @RequiresApi(Build.VERSION_CODES.M)
     private inner class CrimeHolder(view: View)
         : RecyclerView.ViewHolder(view) {
         private val titleTextView: TextView = view.findViewById(R.id.crime_title)
@@ -102,17 +83,38 @@ class CrimeListFragment : Fragment() {
 
         private val positiveListener = DialogInterface.OnClickListener {
                 p0, p1 ->
-                Toast.makeText(context,R.string.policeIntentMessage,Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, R.string.policeIntentMessage,Toast.LENGTH_SHORT).show()
                 val uri = Uri.parse(getText(R.string.policeNumber) as String?)
                 val intent = Intent(Intent.ACTION_DIAL,uri)
                 startActivity(intent)
         }
 
         init {
-            view.setOnClickListener {
-                Toast.makeText(context, "${crime.title} pressed!", Toast.LENGTH_SHORT).show()
+            view.setOnClickListener{
                 callbacks?.onCrimeSelected(crime.id)
             }
+
+            view.setOnLongClickListener{ it ->
+                val popupMenu : PopupMenu = PopupMenu(context,it)
+                activity?.menuInflater?.inflate(R.menu.recy_menu,popupMenu.menu)
+
+
+                popupMenu.setOnMenuItemClickListener {
+                    when(it.itemId) {
+                        R.id.deleteDataMenu -> {
+                            Toast.makeText(context,"삭제합니다",Toast.LENGTH_SHORT).show()
+                            crimeListViewModel.deleteCrime(crime)
+                            true
+                        }
+                        else -> true
+                    }
+                }
+                popupMenu.gravity = Gravity.END
+
+                popupMenu.show()
+                true
+            }
+
             callPolice?.setOnClickListener {
                 AlertDialog.Builder(context).apply {
                     setMessage(R.string.callPoliceMessage)
@@ -122,17 +124,16 @@ class CrimeListFragment : Fragment() {
                     setTitle("알림")
                     show()
                 }
-
             }
+
             isSolved.setOnClickListener {
-                Toast.makeText(context,R.string.isSolvedMessage,Toast.LENGTH_SHORT).apply{
+                Toast.makeText(context, R.string.isSolvedMessage,Toast.LENGTH_SHORT).apply{
                     setGravity(Gravity.CENTER,0,0)
                     show()
                 }
             }
 
 
-            registerForContextMenu(view)
         }
 
 
@@ -167,6 +168,7 @@ class CrimeListFragment : Fragment() {
                 }
 
             }
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
 
                 return when(viewType) {
@@ -182,6 +184,7 @@ class CrimeListFragment : Fragment() {
 
             }
 
+            @RequiresApi(Build.VERSION_CODES.M)
             override fun onBindViewHolder(holder: CrimeHolder, position: Int) {
                 val crime = crimes[position]
                 holder.bind(crime)
@@ -200,41 +203,24 @@ class CrimeListFragment : Fragment() {
         }
 
 
-    // 얘는 나중에 지워야됨
-        fun addDatabase(){
-            val crimeRepository = CrimeRepository.get()
 
-            val list = mutableListOf<Crime>()
-
-            for(i in 0..10){
-                list += Crime(title="Crime$i", isSolved = i%2 != 0 , requiresPolice = i%2 != 1)
-            }
-
-            crimeRepository.putCrimes(list as List<Crime>)
-
-        }
 
         override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
-        ): View? {
+        ): View {
             val binding = FragmentCrimeListBinding.inflate(layoutInflater, container, false)
-
-
-            //binding.crimeRecyclerView.adapter = CrimeAdapter(list as List<Crime>)
-            //binding.crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-
             crimeRecyclerView = binding.crimeRecyclerView
-            crimeRecyclerView.layoutManager = LinearLayoutManager(context)
-            crimeRecyclerView.adapter = adapter
 
-            //updateUI()
+            val list = emptyList<Crime>()
+
+            updateUI(list)
+
+
 
             binding.addDatabaseBtn.setOnClickListener {
-                Thread {
-                    addDatabase()
-                }.start()
+                crimeListViewModel.putCrimes()
                 Toast.makeText(context,"DB추가 완료",Toast.LENGTH_SHORT).show()
             }
 

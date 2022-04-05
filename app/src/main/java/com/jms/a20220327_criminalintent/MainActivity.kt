@@ -2,8 +2,9 @@ package com.jms.a20220327_criminalintent
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
+import com.jms.a20220327_criminalintent.Fragment.CrimeFragment
+import com.jms.a20220327_criminalintent.Fragment.CrimeListFragment
 import com.jms.a20220327_criminalintent.databinding.ActivityMainBinding
 import java.util.*
 
