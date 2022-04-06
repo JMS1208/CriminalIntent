@@ -10,4 +10,5 @@
     <color name="item_stroke">#43919191</color>
     <color name="brightGrey">#CFCFCF</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="lightGrey">#424242</color>
 </resources>

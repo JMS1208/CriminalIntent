@@ -4,6 +4,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.ColorFilter
+import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -21,12 +24,17 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.jms.a20220327_criminalintent.Crime
 import com.jms.a20220327_criminalintent.R
 import com.jms.a20220327_criminalintent.ViewModel.CrimeListViewModel
 import com.jms.a20220327_criminalintent.databinding.FragmentCrimeListBinding
 import com.jms.a20220327_criminalintent.databinding.ListItemCrimeBinding
 import com.jms.a20220327_criminalintent.databinding.ListItemCrimeRequirePoliceBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import java.util.*
 
 
@@ -67,6 +75,22 @@ class CrimeListFragment : Fragment() {
                     updateUI(crimes)
             } }
         )
+        val pullToRefreshLayout: SwipeRefreshLayout = view.findViewById(R.id.pullToRefreshLayout)
+        pullToRefreshLayout.setOnRefreshListener {
+            pullToRefreshLayout.isRefreshing = true
+            CoroutineScope(Dispatchers.Main).launch {
+                async {
+                    updateUI()
+                    true
+                }.join()
+                launch {
+                    pullToRefreshLayout.isRefreshing = false
+                }
+
+            }
+
+
+        }
     }
 
 
@@ -92,6 +116,7 @@ class CrimeListFragment : Fragment() {
         init {
             view.setOnClickListener{
                 callbacks?.onCrimeSelected(crime.id)
+                // 디테일로 들어가는 거
             }
 
             view.setOnLongClickListener{ it ->
@@ -111,9 +136,14 @@ class CrimeListFragment : Fragment() {
                 }
                 popupMenu.gravity = Gravity.END
 
-                popupMenu.show()
+                //popupMenu.show()
+                //팝업 메뉴 띄우는거
                 true
             }
+
+            view.findViewById<ImageView>(R.id.trashBinImage)?.setColorFilter(
+                Color.parseColor("#FFFFFFFF"),
+                PorterDuff.Mode.SRC_OUT)
 
             callPolice?.setOnClickListener {
                 AlertDialog.Builder(context).apply {
@@ -195,7 +225,7 @@ class CrimeListFragment : Fragment() {
 
         }
 
-        private fun updateUI(crimes: List<Crime>) {
+        private fun updateUI(crimes: List<Crime> = crimeListViewModel.crimeListLiveData.value?: emptyList()) {
 
             adapter = CrimeAdapter(crimes)
             crimeRecyclerView.adapter = adapter

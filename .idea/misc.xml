@@ -5,14 +5,22 @@
       <map>
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/activity_style1.xml" value="0.1215" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/activity_style2.xml" value="0.102" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/delete_item_style.xml" value="0.1285" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/free-icon-font-trash-3917378_24.xml" value="0.1" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/ic_launcher_background.xml" value="0.1275" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/item_style.xml" value="0.169" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/drawable/trash_bin.xml" value="0.1" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/activity_intro.xml" value="0.1983695652173913" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/activity_main.xml" value="0.15715579710144928" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/fragment_add_crime.xml" value="0.16168478260869565" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/fragment_crime.xml" value="0.25" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/fragment_crime_list.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/fragment_crime_list_pull_to_refresh.xml" value="0.1983695652173913" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/fragment_date_picker.xml" value="0.1983695652173913" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/item_swipe_layout.xml" value="0.10055724417426545" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/list_item_crime.xml" value="0.25" />
-        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/list_item_crime_require_police.xml" value="0.33" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/list_item_crime_require_police.xml" value="0.25" />
+        <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/layout/remove_item_crime.xml" value="0.8053435114503816" />
         <entry key="..\:/MyAndroid/20220327_CriminalIntent/app/src/main/res/menu/recy_menu.xml" value="0.175" />
       </map>
     </option>
