@@ -3,7 +3,7 @@ package com.jms.a20220327_criminalintent.database
 import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.room.Room
-import com.jms.a20220327_criminalintent.Crime
+import com.jms.a20220327_criminalintent.Model.Crime
 import java.lang.IllegalStateException
 import java.util.*
 import java.util.concurrent.Executors
@@ -15,13 +15,14 @@ class CrimeRepository private constructor(context: Context) {
         context.applicationContext,
         CrimeDatabase::class.java,
         DATABASE_NAME
-    ).build()
+    ).addMigrations(migragtion_1_2)
+        .build()
 
     private val executor = Executors.newSingleThreadExecutor()
 
     private val crimeDao = database.crimeDao()
 
-    fun getCrimes(): LiveData<List<Crime>> = crimeDao.getCrimes()
+    fun getCrimes(): LiveData<MutableList<Crime>> = crimeDao.getCrimes()
 
     fun getCrime(id: UUID): LiveData<Crime?> = crimeDao.getCrime(id)
 

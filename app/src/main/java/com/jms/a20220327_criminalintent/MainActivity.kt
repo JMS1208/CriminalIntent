@@ -3,13 +3,15 @@ package com.jms.a20220327_criminalintent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.jms.a20220327_criminalintent.Fragment.AddCrimeItemFragment
 import com.jms.a20220327_criminalintent.Fragment.CrimeFragment
 import com.jms.a20220327_criminalintent.Fragment.CrimeListFragment
 import com.jms.a20220327_criminalintent.databinding.ActivityMainBinding
 import java.util.*
 
 private val TAG = "메인 액티비티"
-class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks, CrimeFragment.Callbacks {
+class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks,
+    CrimeFragment.Callbacks {
     lateinit var binding: ActivityMainBinding
 
     private fun onCreateFragment(fragment: Fragment) {
@@ -23,7 +25,7 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks, CrimeFrag
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        title = ""
         val currentFragment =
             supportFragmentManager.findFragmentById(R.id.fragment_container)
 
@@ -44,7 +46,10 @@ class MainActivity : AppCompatActivity(), CrimeListFragment.Callbacks, CrimeFrag
         onCreateFragment(fragment)
     }
 
-
+    override fun onReplaceFragmentToAddCrimeItemFragment() {
+        val fragment = AddCrimeItemFragment()
+        onCreateFragment(fragment)
+    }
 
 
 }

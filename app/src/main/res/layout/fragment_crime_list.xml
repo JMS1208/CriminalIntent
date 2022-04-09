@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -14,35 +15,82 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Crime 목록"
+            android:text="@string/crime_list"
             android:textSize="22sp"
-            android:layout_margin="10dp"
-            android:layout_gravity="center"
-
+            android:layout_margin="5dp"
+            android:gravity="center"
             />
-        <Button
+
+    </LinearLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/pullToRefreshLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:id="@+id/comment_no_data_layout"
+                    >
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_no_data"
+                        android:id="@+id/image_no_data"
+                        />
+                    <TextView
+                        android:layout_gravity="center"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/text_no_data"
+                        android:text="@string/text_no_data"
+
+                        />
+                </LinearLayout>
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/crime_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="10dp" />
+            </FrameLayout>
+
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.getbase.floatingactionbutton.FloatingActionsMenu
+            android:id="@+id/floatingActionMenuButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="15sp"
-            android:text="추가"
-            android:id="@+id/addDatabaseBtn"
-            android:layout_gravity="center_vertical"
-            android:layout_marginEnd="10dp"
+            app:fab_addButtonColorNormal="@color/brightGrey"
+            app:fab_addButtonColorPressed="@color/lightGreen"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent">
 
-            />
-    </LinearLayout>
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/pullToRefreshLayout"
-        >
-        <androidx.recyclerview.widget.RecyclerView
+            <com.getbase.floatingactionbutton.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:fab_colorNormal="@color/brightGrey"
+                app:fab_icon="@drawable/ic_add_crime"
+                app:fab_colorPressed="@color/lightYellow"
+                android:id="@+id/add_crime_button"
+                />
 
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/crime_recycler_view"
-            android:layout_marginBottom="10dp"
-        />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        </com.getbase.floatingactionbutton.FloatingActionsMenu>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 </LinearLayout>
 

@@ -11,4 +11,6 @@
     <color name="brightGrey">#CFCFCF</color>
     <color name="white">#FFFFFFFF</color>
     <color name="lightGrey">#424242</color>
+    <color name="veryLightGrey">#818181</color>
+    <color name="darkLightBrown">#917765</color>
 </resources>

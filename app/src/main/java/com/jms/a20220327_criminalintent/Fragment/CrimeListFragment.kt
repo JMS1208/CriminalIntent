@@ -5,27 +5,24 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
-import android.graphics.ColorFilter
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.text.Layout
 import android.text.format.DateFormat
-import android.util.LayoutDirection
 import android.util.Log
 import android.view.*
-import android.widget.ImageView
-import android.widget.PopupMenu
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.jms.a20220327_criminalintent.Crime
+import com.jms.a20220327_criminalintent.Model.Crime
+import com.jms.a20220327_criminalintent.CrimeListItemTouchEvent.ItemTouchHelperCallback
+import com.jms.a20220327_criminalintent.CrimeListItemTouchEvent.ItemTouchHelperListener
 import com.jms.a20220327_criminalintent.R
 import com.jms.a20220327_criminalintent.ViewModel.CrimeListViewModel
 import com.jms.a20220327_criminalintent.databinding.FragmentCrimeListBinding
@@ -39,20 +36,32 @@ import java.util.*
 
 
 class CrimeListFragment : Fragment() {
+
+    private lateinit var noDataLayout : LinearLayout
+
     private lateinit var crimeRecyclerView: RecyclerView
 
-    private var adapter: CrimeAdapter? = CrimeAdapter(emptyList())
+    private var adapter: CrimeAdapter? = CrimeAdapter(mutableListOf())
 
     private val crimeListViewModel: CrimeListViewModel by lazy {
         ViewModelProvider(this).get(CrimeListViewModel::class.java)
     }
+    private lateinit var crimesInFragment : MutableList<Crime>
 
     private var callbacks : Callbacks? = null
 
+    private var backToThePosition : Int? = null
+
     interface Callbacks {
         fun onCrimeSelected(uuid: UUID)
+        fun onReplaceFragmentToAddCrimeItemFragment()
     }
 
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -64,6 +73,22 @@ class CrimeListFragment : Fragment() {
         callbacks = null
     }
 
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when(item.itemId) {
+            R.id.new_crime -> {
+                val crime = Crime()
+                crimeListViewModel.addCrime(crime)
+                callbacks?.onCrimeSelected(crime.id)
+                true
+            }
+
+            else -> super.onOptionsItemSelected(item)
+        }
+
+
+
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -115,9 +140,11 @@ class CrimeListFragment : Fragment() {
 
         init {
             view.setOnClickListener{
+
                 callbacks?.onCrimeSelected(crime.id)
                 // 디테일로 들어가는 거
             }
+
 
             view.setOnLongClickListener{ it ->
                 val popupMenu : PopupMenu = PopupMenu(context,it)
@@ -183,11 +210,16 @@ class CrimeListFragment : Fragment() {
 
         }
 
-        private inner class CrimeAdapter(var crimes: List<Crime>) :
-            RecyclerView.Adapter<CrimeHolder>() {
+        private inner class CrimeAdapter(var crimes: MutableList<Crime>) :
+            RecyclerView.Adapter<CrimeHolder>(), ItemTouchHelperListener {
 
             private val CRIME_REQUIRE_POLICE = 1
             private val CRIME_NOT_REQUIRE_POLICE = 2
+
+            override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+                super.onAttachedToRecyclerView(recyclerView)
+                crimesInFragment = crimes
+            }
 
             override fun getItemViewType(position: Int): Int {
 
@@ -198,6 +230,36 @@ class CrimeListFragment : Fragment() {
                 }
 
             }
+
+            override fun onItemMove(from_position: Int, to_position: Int): Boolean {
+                try{
+                    val crime = crimesInFragment[from_position]
+
+                    crimesInFragment.removeAt(from_position)
+
+                    crimesInFragment.add(to_position, crime)
+                    // 이부분 안 됨
+
+                    notifyItemMoved(from_position, to_position)
+                    updateUI(crimesInFragment)
+                }catch(E: Exception) {
+                    Toast.makeText(context,"사이즈가 0임",Toast.LENGTH_SHORT).show()
+                }
+                return true
+            }
+
+            override fun onItemSwipe(position: Int) {
+                val crime = crimesInFragment[position]
+                crimesInFragment.removeAt(position)
+                // 아이템 삭제되었다고 공지
+                crimeListViewModel.deleteCrime(crime)
+                backToThePosition = position
+
+                notifyItemRemoved(position)
+                //updateUI(crimesInFragment)
+
+            }
+
             @RequiresApi(Build.VERSION_CODES.M)
             override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
 
@@ -225,11 +287,24 @@ class CrimeListFragment : Fragment() {
 
         }
 
-        private fun updateUI(crimes: List<Crime> = crimeListViewModel.crimeListLiveData.value?: emptyList()) {
+
+
+        private fun updateUI(crimes: MutableList<Crime>
+            = crimeListViewModel.crimeListLiveData.value?: mutableListOf()) {
 
             adapter = CrimeAdapter(crimes)
             crimeRecyclerView.adapter = adapter
             crimeRecyclerView.layoutManager = LinearLayoutManager(context)
+            if(backToThePosition != null){
+                crimeRecyclerView.smoothScrollToPosition(backToThePosition!!)
+            }
+            noDataLayout.visibility = if(crimes.size == 0) View.VISIBLE else View.INVISIBLE
+        }
+
+        override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+            super.onCreateOptionsMenu(menu, inflater)
+
+            inflater.inflate(R.menu.fragment_crime_list, menu)
         }
 
 
@@ -243,15 +318,24 @@ class CrimeListFragment : Fragment() {
             val binding = FragmentCrimeListBinding.inflate(layoutInflater, container, false)
             crimeRecyclerView = binding.crimeRecyclerView
 
-            val list = emptyList<Crime>()
+            noDataLayout = binding.commentNoDataLayout
+            val list = mutableListOf<Crime>()
 
             updateUI(list)
 
+            val itemTouchHelperCallback = ItemTouchHelperCallback(adapter as ItemTouchHelperListener)
+
+            val helper = ItemTouchHelper(itemTouchHelperCallback)
+
+            helper.attachToRecyclerView(binding.crimeRecyclerView)
 
 
-            binding.addDatabaseBtn.setOnClickListener {
-                crimeListViewModel.putCrimes()
-                Toast.makeText(context,"DB추가 완료",Toast.LENGTH_SHORT).show()
+
+            binding.addCrimeButton.setOnClickListener{
+                binding.floatingActionMenuButton.collapse()
+                val crime = Crime()
+                crimeListViewModel.addCrime(crime)
+                callbacks?.onCrimeSelected(crime.id)
             }
 
             return binding.root

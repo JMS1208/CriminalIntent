@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">크리미널 인텐트</string>
+    <string name="app_name">당신의뒷담화</string>
     <string name="crime_title_hint">범죄의 제목을 입력하세요</string>
     <string name="crime_title_label">제목</string>
     <string name="crime_details_label">상세 내역</string>
     <string name="crime_solved_label">해결됨</string>
-    <!-- TODO: Remove or change this placeholder text -->
+
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="callPoliceMessage">경찰에 신고하시겠습니까?</string>
     <string name="policeIntentMessage">경찰에 신고하기를 누르셨습니다</string>
@@ -13,4 +13,19 @@
     <string name="저작권표기"><a href="https://www.flaticon.com/free-icons/security-guard" title="Security guard icons">Security guard icons created by smalllikeart - Flaticon</a></string>
     <string name="deleteDataMenu">삭제</string>
     <string name="deleteTextView">삭제</string>
+    <string name="new_crime">새로운 Crime</string>
+    <string name="text_no_data">데이터를 추가해주세요</string>
+    <string name="crime_list">Crime 목록</string>
+    <string name="crime_suspect_text">용의자 선택</string>
+    <string name="crime_report_text">범죄 보고서 전송</string>
+
+    <string name="crime_report">[제목: %1$s]\n발견된 날짜: %2$s\n%3$s, 그리고 %4$s</string>
+    <string name="crime_report_solved">이 건은 해결되었음</string>
+    <string name="crime_report_unsolved">이 건은 해결되지 않았음</string>
+    <string name="crime_report_no_suspect">용의자가 없음</string>
+    <string name="crime_report_suspect">용의자는 %s</string>
+    <string name="crime_report_subject">CriminalIntent 범죄 보고서</string>
+    <string name="send_report">범죄 보고서 전송</string>
+    <string name="crime_suspect">%1$s(%2$s)</string>
+    <string name="crime_suspect_button_text_whole">용의자: %s</string>
 </resources>

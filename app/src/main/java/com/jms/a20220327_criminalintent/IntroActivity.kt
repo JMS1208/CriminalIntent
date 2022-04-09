@@ -13,6 +13,8 @@ class IntroActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        supportActionBar?.hide()
+
         CoroutineScope(Dispatchers.Main).launch{
             launch {
                 val binding = ActivityIntroBinding.inflate(layoutInflater)

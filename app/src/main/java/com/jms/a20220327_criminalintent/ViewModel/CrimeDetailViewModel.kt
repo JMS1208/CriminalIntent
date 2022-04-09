@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
-import com.jms.a20220327_criminalintent.Crime
+import com.jms.a20220327_criminalintent.Model.Crime
 import com.jms.a20220327_criminalintent.database.CrimeRepository
 import java.util.*
 
